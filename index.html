@@ -1,0 +1,1976 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="测试与技术支持 AI 排障培训手册，包含58个内部案例和可直接复制的提问模板。">
+  <title>客服与技术支持 AI 排障培训手册</title>
+  <style>
+    :root {
+      --navy: #173a5e;
+      --navy-deep: #102c48;
+      --navy-soft: #e8f0f7;
+      --orange: #df612f;
+      --orange-soft: #fff1e9;
+      --green: #24755a;
+      --green-soft: #e5f4ed;
+      --yellow: #9a6a05;
+      --yellow-soft: #fff4cf;
+      --red: #a5483a;
+      --red-soft: #fbe9e5;
+      --ink: #22303c;
+      --muted: #637180;
+      --line: #d6dde4;
+      --paper: #ffffff;
+      --page: #f5f7f9;
+      --sidebar-width: 292px;
+      --content-width: 1120px;
+      --reader-size: 17px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--page);
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: var(--reader-size);
+      line-height: 1.8;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: #1765a3; text-underline-offset: 3px; }
+    a:hover { color: var(--orange); }
+    button, input { font: inherit; }
+
+    .skip-link {
+      position: fixed;
+      top: -80px;
+      left: 18px;
+      z-index: 100;
+      padding: 10px 14px;
+      color: #fff;
+      background: var(--orange);
+      border-radius: 6px;
+    }
+    .skip-link:focus { top: 14px; }
+
+    .progress {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 90;
+      height: 4px;
+      background: transparent;
+    }
+    .progress-bar { width: 0; height: 100%; background: var(--orange); }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 50;
+      width: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+      color: #eaf1f7;
+      background: var(--navy-deep);
+      border-right: 1px solid rgba(255,255,255,.1);
+    }
+    .sidebar-head {
+      padding: 28px 24px 22px;
+      background: var(--navy);
+      border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+    .sidebar-label {
+      margin: 0 0 8px;
+      color: #ffb38f;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+    }
+    .sidebar-head h2 {
+      margin: 0;
+      color: #fff;
+      font-family: "Songti SC", "STSong", serif;
+      font-size: 23px;
+      line-height: 1.45;
+    }
+    .sidebar-head p { margin: 10px 0 0; color: #bfd0df; font-size: 13px; }
+    .toc {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px 28px;
+      scrollbar-color: #55728c transparent;
+    }
+    .toc-title {
+      margin: 0 12px 8px;
+      color: #8ba5bb;
+      font-size: 11px;
+      letter-spacing: .12em;
+    }
+    .toc-item {
+      display: block;
+      padding: 7px 12px;
+      color: #c8d6e2;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .toc-item:hover { color: #fff; background: rgba(255,255,255,.08); }
+    .toc-item.active { color: #fff; background: #285578; }
+    .toc-1 { margin-top: 12px; color: #fff; font-weight: 700; }
+    .toc-2 { padding-left: 22px; }
+    .sidebar-foot {
+      padding: 14px 24px 20px;
+      color: #8fa7ba;
+      border-top: 1px solid rgba(255,255,255,.12);
+      font-size: 11px;
+    }
+
+    .page { margin-left: var(--sidebar-width); min-width: 0; }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 58px;
+      padding: 9px 24px;
+      background: rgba(255,255,255,.95);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+    .menu-button { display: none; }
+    .search-wrap { position: relative; flex: 1; max-width: 560px; }
+    .search {
+      width: 100%;
+      height: 39px;
+      padding: 0 14px 0 38px;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid #bfc9d3;
+      border-radius: 7px;
+      outline: none;
+    }
+    .search:focus { border-color: #2c75ad; box-shadow: 0 0 0 3px rgba(44,117,173,.14); }
+    .search-icon { position: absolute; left: 13px; top: 7px; color: var(--muted); }
+    .search-count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .button {
+      height: 39px;
+      padding: 0 13px;
+      color: var(--navy);
+      background: #fff;
+      border: 1px solid #bfc9d3;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+    .button:hover { background: var(--navy-soft); }
+
+    .hero {
+      padding: 54px clamp(28px, 6vw, 88px) 50px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 88% 18%, rgba(255,179,143,.22), transparent 30%),
+        linear-gradient(128deg, var(--navy-deep), var(--navy));
+    }
+    .hero-kicker { margin: 0 0 12px; color: #ffb38f; font-size: 13px; font-weight: 700; letter-spacing: .1em; }
+    .hero h1 {
+      max-width: 800px;
+      margin: 0;
+      font-family: "Songti SC", "STSong", serif;
+      font-size: clamp(36px, 5vw, 62px);
+      line-height: 1.2;
+      letter-spacing: -.035em;
+    }
+    .hero p { max-width: 760px; margin: 20px 0 0; color: #d6e3ed; }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 24px; }
+    .hero-tag { padding: 5px 10px; color: #f7fbff; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.24); border-radius: 999px; font-size: 12px; }
+
+    .document {
+      width: min(calc(100% - 48px), var(--content-width));
+      margin: 34px auto 100px;
+      padding: clamp(26px, 4vw, 58px);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 12px 36px rgba(28,48,66,.08);
+    }
+    .document > h1:first-child { display: none; }
+    .document p, .document li { max-width: 76ch; }
+    .document h1, .document h2, .document h3 {
+      position: relative;
+      color: var(--navy-deep);
+      font-family: "Songti SC", "STSong", serif;
+      scroll-margin-top: 76px;
+    }
+    .document h1 {
+      margin: 78px 0 28px;
+      padding-top: 25px;
+      border-top: 2px solid var(--navy);
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.3;
+    }
+    .document h2 { margin: 46px 0 16px; font-size: 28px; line-height: 1.4; }
+    .document h3 { margin: 30px 0 12px; color: #2b5578; font-size: 21px; }
+    .anchor { margin-left: 9px; color: transparent; font-size: .65em; text-decoration: none; }
+    h1:hover .anchor, h2:hover .anchor, h3:hover .anchor, .anchor:focus { color: var(--orange); }
+    .document p { margin: 10px 0; }
+    .document ul, .document ol { padding-left: 1.55em; }
+    .document li { margin: 6px 0; }
+    .document li::marker { color: var(--orange); font-weight: 700; }
+    .document strong { color: #132f4c; }
+
+    .document blockquote {
+      margin: 0 0 30px;
+      padding: 20px 22px;
+      color: #71321b;
+      background: var(--orange-soft);
+      border: 1px solid #f0b89d;
+      border-radius: 8px;
+    }
+    .document blockquote p { margin: 5px 0; }
+
+    code {
+      padding: .12em .38em;
+      color: #8b371a;
+      background: #fff1e9;
+      border: 1px solid #f2cbb8;
+      border-radius: 4px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: .86em;
+      overflow-wrap: anywhere;
+    }
+    pre {
+      position: relative;
+      overflow: auto;
+      margin: 18px 0 26px;
+      padding: 22px;
+      color: #e8f1f7;
+      background: #112b44;
+      border-radius: 8px;
+      font-size: .86em;
+      line-height: 1.7;
+    }
+    pre code { padding: 0; color: inherit; background: transparent; border: 0; }
+    .copy-code {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      padding: 5px 9px;
+      color: #dce9f2;
+      background: #244d6c;
+      border: 1px solid #466b87;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .copy-code:hover { background: #316388; }
+
+    .table-scroll {
+      overflow-x: auto;
+      margin: 18px 0 30px;
+      border: 1px solid #c9d3dc;
+      border-radius: 8px;
+      scrollbar-color: #9cabb8 #eef2f5;
+    }
+    table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: .86em; line-height: 1.6; }
+    th { padding: 11px 13px; color: #fff; background: var(--navy); border-right: 1px solid #41627e; text-align: left; white-space: nowrap; }
+    td { padding: 11px 13px; vertical-align: top; background: #fff; border-right: 1px solid #d9e0e6; border-bottom: 1px solid #d9e0e6; }
+    tr:last-child td { border-bottom: 0; }
+    th:last-child, td:last-child { border-right: 0; }
+    tbody tr:hover td { background: #f7fafc; }
+    td:first-child { min-width: 210px; }
+
+    .status { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .status-closed { color: var(--green); background: var(--green-soft); }
+    .status-concluded { color: #23648f; background: #e5f1f8; }
+    .status-progress { color: var(--yellow); background: var(--yellow-soft); }
+    .status-practice { color: var(--red); background: var(--red-soft); }
+
+    input[type="checkbox"] { width: 17px; height: 17px; vertical-align: -3px; accent-color: var(--navy); }
+    hr { margin: 58px 0; height: 1px; border: 0; background: var(--line); }
+
+    .back-top {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 30;
+      width: 42px;
+      height: 42px;
+      color: #fff;
+      background: var(--navy);
+      border: 0;
+      border-radius: 50%;
+      box-shadow: 0 7px 20px rgba(18,46,72,.25);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+    }
+    .back-top.show { opacity: 1; pointer-events: auto; }
+    .shade { display: none; }
+    :focus-visible { outline: 3px solid rgba(223,97,47,.35); outline-offset: 3px; }
+
+    @media (max-width: 960px) {
+      .sidebar { transform: translateX(-100%); transition: transform .18s ease; }
+      body.nav-open .sidebar { transform: translateX(0); }
+      .page { margin-left: 0; }
+      .menu-button { display: inline-block; }
+      .shade { position: fixed; inset: 0; z-index: 45; display: block; background: rgba(9,27,44,.5); opacity: 0; pointer-events: none; transition: opacity .18s ease; }
+      body.nav-open .shade { opacity: 1; pointer-events: auto; }
+    }
+
+    @media (max-width: 640px) {
+      :root { --reader-size: 16px; }
+      .toolbar { padding: 8px 10px; gap: 6px; }
+      .search-count, .font-label { display: none; }
+      .button { padding: 0 10px; }
+      .hero { padding: 42px 20px 38px; }
+      .hero h1 { font-size: 34px; }
+      .document { width: calc(100% - 20px); margin-top: 18px; padding: 22px 17px 50px; border-radius: 8px; }
+      .document h1 { margin-top: 58px; font-size: 30px; }
+      .document h2 { font-size: 24px; }
+      .document h3 { font-size: 20px; }
+      table { min-width: 700px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 15mm 12mm; }
+      body { color: #111; background: #fff; font-size: 10.5pt; }
+      .progress, .sidebar, .toolbar, .hero, .shade, .back-top, .copy-code { display: none !important; }
+      .page { margin: 0; }
+      .document { width: 100%; margin: 0; padding: 0; border: 0; box-shadow: none; }
+      .document > h1:first-child { display: block; margin-top: 0; }
+      .document h1, .document h2, .document h3 { break-after: avoid; }
+      .table-scroll { overflow: visible; border-radius: 0; }
+      table { min-width: 0; font-size: 7.5pt; }
+      thead { display: table-header-group; }
+      tr { break-inside: avoid; }
+      th { print-color-adjust: exact; }
+      td { min-width: 0 !important; padding: 5px 6px; }
+      pre, blockquote { break-inside: avoid; print-color-adjust: exact; }
+      a { color: inherit; text-decoration: none; }
+      .anchor { display: none; }
+    }
+      .case-reference { color: #2b5578; font-weight: 650; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <div class="progress" aria-hidden="true"><div class="progress-bar"></div></div>
+  <div class="shade" aria-hidden="true"></div>
+
+  <aside class="sidebar" aria-label="文档目录">
+    <div class="sidebar-head">
+      <p class="sidebar-label">培训资料</p>
+      <h2>客服与技术支持<br>AI 排障手册</h2>
+      <p>把问题说清楚，让 AI 一步一步查。</p>
+    </div>
+    <nav class="toc" aria-label="页内目录">
+      <p class="toc-title">目录</p>
+<a class="toc-item toc-2" href="#part-2">这份手册给谁看</a>
+<a class="toc-item toc-2" href="#part-3">怎么使用</a>
+<a class="toc-item toc-2" href="#part-4">几个常见词</a>
+<a class="toc-item toc-1" href="#part-5">第一部分：5分钟上手</a>
+<a class="toc-item toc-2" href="#part-6">1. 向 AI 提问前，先准备这些信息</a>
+<a class="toc-item toc-2" href="#part-8">2. 万能提问模板</a>
+<a class="toc-item toc-2" href="#part-9">3. 客服和 AI 的五轮互动法</a>
+<a class="toc-item toc-2" href="#part-15">4. 看 AI 回答时，只检查五件事</a>
+<a class="toc-item toc-1" href="#part-17">第二部分：标准排障步骤</a>
+<a class="toc-item toc-2" href="#part-18">5. 第一步：把问题说清楚</a>
+<a class="toc-item toc-2" href="#part-19">6. 第二步：先找问题出现在哪一段</a>
+<a class="toc-item toc-2" href="#part-20">7. 第三步：只选1～3个最有用的检查</a>
+<a class="toc-item toc-2" href="#part-21">8. 第四步：让 AI 分清四种内容</a>
+<a class="toc-item toc-2" href="#part-22">9. 第五步：形成结论</a>
+<a class="toc-item toc-2" href="#part-23">10. 第六步：由人确认是否结束</a>
+<a class="toc-item toc-1" href="#part-24">第三部分：我们遇到过哪些问题</a>
+<a class="toc-item toc-2" href="#part-25">11. 案例状态怎么理解</a>
+<a class="toc-item toc-2" href="#part-26">12. 8类常见问题</a>
+<a class="toc-item toc-2" href="#part-27">13. 58个 case 速查表</a>
+<a class="toc-item toc-1" href="#part-33">第四部分：7个常用提示词</a>
+<a class="toc-item toc-2" href="#part-34">14. 信息不够时</a>
+<a class="toc-item toc-2" href="#part-35">15. 找相似历史 case</a>
+<a class="toc-item toc-2" href="#part-36">16. 查日志</a>
+<a class="toc-item toc-2" href="#part-37">17. 查代码</a>
+<a class="toc-item toc-2" href="#part-38">18. 对比两个系统的数据</a>
+<a class="toc-item toc-2" href="#part-39">19. 收敛结论</a>
+<a class="toc-item toc-2" href="#part-40">20. 写对外回复</a>
+<a class="toc-item toc-1" href="#part-41">第五部分：8类问题怎么问</a>
+<a class="toc-item toc-2" href="#part-42">21. 库存、改排、调拨和续租</a>
+<a class="toc-item toc-2" href="#part-50">22. 渠道同步</a>
+<a class="toc-item toc-2" href="#part-58">23. 价格、费用、优惠和抽佣</a>
+<a class="toc-item toc-2" href="#part-66">24. 门店、服务圈、车型和映射</a>
+<a class="toc-item toc-2" href="#part-74">25. 操作记录</a>
+<a class="toc-item toc-2" href="#part-82">26. Open接口和合同上报</a>
+<a class="toc-item toc-2" href="#part-90">27. 账户、欠费、提现和支付</a>
+<a class="toc-item toc-2" href="#part-98">28. 图片、GPS、状态和页面展示</a>
+<a class="toc-item toc-1" href="#part-106">第六部分：8个真实案例，用简单的话讲</a>
+<a class="toc-item toc-2" href="#part-107">29. 库存原来同步成功，后来被系统自己释放了</a>
+<a class="toc-item toc-2" href="#part-108">30. 更新库存其实分成删除和新增两步</a>
+<a class="toc-item toc-2" href="#part-109">31. 接口说成功，但少返回了一条服务圈</a>
+<a class="toc-item toc-2" href="#part-110">32. 多次回调用了同一个去重编号</a>
+<a class="toc-item toc-2" href="#part-111">33. 多出来的费用在三方下单时就有</a>
+<a class="toc-item toc-2" href="#part-112">34. 保险加购失败，但取车还是成功了</a>
+<a class="toc-item toc-2" href="#part-113">35. 系统自动上报一次，商户又手动上报一次</a>
+<a class="toc-item toc-2" href="#part-114">36. 钱没有丢，只是在另一个账户里</a>
+<a class="toc-item toc-1" href="#part-115">第七部分：值班检查表</a>
+<a class="toc-item toc-2" href="#part-116">39. 提问前</a>
+<a class="toc-item toc-2" href="#part-117">40. 发结论前</a>
+<a class="toc-item toc-2" href="#part-118">41. 什么时候找研发或二线</a>
+<a class="toc-item toc-2" href="#part-119">42. 最后记住四句话</a>
+    </nav>
+    <div class="sidebar-foot">客服与技术支持培训 · 58个真实案例</div>
+  </aside>
+
+  <div class="page">
+    <header class="toolbar">
+      <button class="button menu-button" type="button" aria-label="打开目录">目录</button>
+      <label class="search-wrap">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="search" class="search" type="search" placeholder="搜索case、渠道或关键词" autocomplete="off" aria-label="搜索文档表格">
+      </label>
+      <span id="search-count" class="search-count" aria-live="polite">可筛选表格</span>
+      <span class="font-label">字号</span>
+      <button class="button font-down" type="button" aria-label="减小字号">A−</button>
+      <button class="button font-up" type="button" aria-label="增大字号">A＋</button>
+      <button class="button print-button" type="button">打印</button>
+    </header>
+
+    <section class="hero">
+      <p class="hero-kicker">CUSTOMER SUPPORT · AI TROUBLESHOOTING</p>
+      <h1>客服与技术支持<br>AI 排障培训手册</h1>
+      <p>客服可以直接照着使用的培训版本。先用五轮互动法说清问题，再追加对应场景的标准问法。</p>
+      <div class="hero-tags">
+        <span class="hero-tag">58个真实案例</span>
+        <span class="hero-tag">7个常用提示词</span>
+        <span class="hero-tag">8类常见问题</span>
+        <span class="hero-tag">手机可读 · 可打印</span>
+      </div>
+    </section>
+
+    <main id="main" class="document">
+      <h1 id="part-1">客服与技术支持 AI 排障培训手册<a class="anchor" href="#part-1" aria-label="链接到客服与技术支持 AI 排障培训手册">#</a></h1>
+<blockquote>
+<p><strong>使用范围说明</strong></p>
+<p>本文用于客服和技术支持排障培训。案例中的业务标识仅用于说明问题，请勿用于无关用途。</p>
+</blockquote>
+<h2 id="part-2">这份手册给谁看<a class="anchor" href="#part-2" aria-label="链接到这份手册给谁看">#</a></h2>
+<p>这份手册主要给客服和一线技术支持使用。</p>
+<p>你不需要会看所有代码，也不需要记住所有系统。学完后，你只需要掌握两件事：</p>
+<ol>
+<li>知道怎么和 AI 一轮一轮地沟通，把问题查清楚。</li>
+<li>遇到不同场景时，知道应该增加哪一段标准问法。</li>
+</ol>
+<h2 id="part-3">怎么使用<a class="anchor" href="#part-3" aria-label="链接到怎么使用">#</a></h2>
+<ul>
+<li>第一次培训：先看“5分钟上手”，练会客服五轮互动法。</li>
+<li>平时值班：直接复制“万能提问模板”。</li>
+<li>遇到具体问题：先用万能模板，再到“8类常见问题”里追加对应问法。</li>
+<li>做复盘：看“真实案例”和“值班检查表”。</li>
+</ul>
+<h2 id="part-4">几个常见词<a class="anchor" href="#part-4" aria-label="链接到几个常见词">#</a></h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>词</th>
+<th>简单理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>三方/渠道</td>
+<td>携程、哈啰、滴滴、铁行、悟空、微信等外部平台</td>
+</tr>
+<tr>
+<td>traceId</td>
+<td>一次请求的追踪编号，可以用它把多个服务的日志连起来</td>
+</tr>
+<tr>
+<td>userId</td>
+<td>操作账号的编号，不一定能直接代表真实姓名</td>
+</tr>
+<tr>
+<td>映射</td>
+<td>SaaS对象和三方对象之间的对应关系</td>
+</tr>
+<tr>
+<td>回调</td>
+<td>三方处理后，主动把结果通知给SaaS</td>
+</tr>
+<tr>
+<td>重试</td>
+<td>第一次失败后，系统再次尝试</td>
+</tr>
+<tr>
+<td>补偿/恢复</td>
+<td>失败后，系统自动把数据补回正确状态</td>
+</tr>
+<tr>
+<td>远端库存</td>
+<td>保存在三方平台上的库存，不是SaaS本地库存</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h1 id="part-5">第一部分：5分钟上手<a class="anchor" href="#part-5" aria-label="链接到第一部分：5分钟上手">#</a></h1>
+<h2 id="part-6">1. 向 AI 提问前，先准备这些信息<a class="anchor" href="#part-6" aria-label="链接到1. 向 AI 提问前，先准备这些信息">#</a></h2>
+<p>不用写很长，但下面几项越完整，AI 越容易找到问题。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>要准备什么</th>
+<th>怎么理解</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>问题现象</td>
+<td>用户实际看到了什么</td>
+<td>SaaS 是999元，滴滴还是468元</td>
+</tr>
+<tr>
+<td>正常应该怎样</td>
+<td>你希望看到什么结果</td>
+<td>滴滴应该更新为999元</td>
+</tr>
+<tr>
+<td>业务对象</td>
+<td>能用来搜索的编号</td>
+<td>商家1334、订单6809419、车牌云PD99615</td>
+</tr>
+<tr>
+<td>渠道和环境</td>
+<td>问题发生在哪里</td>
+<td>滴滴、生产环境</td>
+</tr>
+<tr>
+<td>时间</td>
+<td>什么时候发生的</td>
+<td>8月10日18:30～20:30</td>
+</tr>
+<tr>
+<td>操作过程</td>
+<td>用户先做了什么、后做了什么</td>
+<td>改价格后保存，没有再次操作</td>
+</tr>
+<tr>
+<td>两边的差异</td>
+<td>不同系统分别是什么值</td>
+<td>SaaS=999，滴滴=468</td>
+</tr>
+<tr>
+<td>已知证据</td>
+<td>截图、错误码、traceId、已查结果</td>
+<td>微信返回“商户号格式错误”</td>
+</tr>
+</tbody></table></div>
+<p>如果某项不知道，就直接写“未知”。不要自己猜。</p>
+<h3 id="part-7">可以直接复制的信息卡<a class="anchor" href="#part-7" aria-label="链接到可以直接复制的信息卡">#</a></h3>
+<pre><code class="language-text">问题现象：
+正常应该怎样：
+商家/门店：
+订单/车辆/车型/库存/合同等编号：
+渠道和环境：
+发生时间：
+用户做过什么：
+两个系统分别显示什么：
+截图、错误码、traceId或已查结果：
+我现在最想确认的问题：
+</code></pre>
+<h2 id="part-8">2. 万能提问模板<a class="anchor" href="#part-8" aria-label="链接到2. 万能提问模板">#</a></h2>
+<pre><code class="language-text">这是一个内部生产问题，请帮我一步一步排查。
+
+问题现象：[填写]
+正常应该怎样：[填写]
+业务对象：[商家、订单、车辆等编号]
+渠道和环境：[填写]
+发生时间：[填写；不知道就写未知]
+用户操作过程：[填写]
+两个系统的差异：[填写]
+已有证据：[填写]
+
+请先做下面几件事：
+1. 用简单的话复述这个问题；
+2. 分开写“已经确定的事实”“目前只是猜测的原因”“还缺的信息”；
+3. 如果有很像的历史case，最多参考3个，但不要直接照搬旧结论；
+4. 只给我1～3个最值得先做的检查；
+5. 每个检查都要说明：为什么查、能排除什么、查完后下一步怎么走；
+6. 缺信息时最多问我3个关键问题；
+7. 没有证据时不要直接下结论；
+8. 不要执行改库、重推、补状态或修改配置。
+</code></pre>
+<h2 id="part-9">3. 客服和 AI 的五轮互动法<a class="anchor" href="#part-9" aria-label="链接到3. 客服和 AI 的五轮互动法">#</a></h2>
+<p>不要指望一次提问就得到正确答案。更稳妥的做法是：每轮只解决一个问题，把新证据继续交给 AI。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>轮次</th>
+<th>客服要做什么</th>
+<th>这一轮的目标</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一轮：说清问题</td>
+<td>提供现象、期望、对象、渠道和时间</td>
+<td>让 AI 正确理解问题</td>
+</tr>
+<tr>
+<td>第二轮：补齐信息</td>
+<td>回答 AI 提出的1～3个关键问题</td>
+<td>把排查范围缩小</td>
+</tr>
+<tr>
+<td>第三轮：选择检查</td>
+<td>让 AI 只推荐1～3个检查动作</td>
+<td>先做成本最低、最能排除原因的检查</td>
+</tr>
+<tr>
+<td>第四轮：提交证据</td>
+<td>把日志、接口结果或截图文字发给 AI</td>
+<td>让 AI 更新判断，不重复猜测</td>
+</tr>
+<tr>
+<td>第五轮：形成结论</td>
+<td>让 AI 整理事实、结论、未知和处理建议</td>
+<td>形成内部结论和客服回复</td>
+</tr>
+</tbody></table></div>
+<h3 id="part-10">第一轮：先把问题说清楚<a class="anchor" href="#part-10" aria-label="链接到第一轮：先把问题说清楚">#</a></h3>
+<p>直接使用上面的“万能提问模板”。如果时间、编号或错误码不知道，就写“未知”，不要猜。</p>
+<h3 id="part-11">第二轮：回答 AI 缺少的信息<a class="anchor" href="#part-11" aria-label="链接到第二轮：回答 AI 缺少的信息">#</a></h3>
+<pre><code class="language-text">你刚才询问的信息，我补充如下：
+
+[问题1]：[答案；不知道就写未知]
+[问题2]：[答案]
+[问题3]：[答案]
+
+请更新“已经确定的事实”和“还缺的信息”。
+如果信息已经够了，请不要继续问很多问题，直接进入下一步。
+</code></pre>
+<h3 id="part-12">第三轮：只选择少量检查<a class="anchor" href="#part-12" aria-label="链接到第三轮：只选择少量检查">#</a></h3>
+<pre><code class="language-text">基于目前的信息，请只推荐1～3个最值得先做的检查。
+
+每个检查都要告诉我：
+1. 具体查什么；
+2. 为什么先查它；
+3. 查到什么结果分别代表什么；
+4. 需要我提供什么信息。
+
+不要只写“查日志”“查代码”这种不能直接执行的建议。
+</code></pre>
+<h3 id="part-13">第四轮：把新证据交给 AI<a class="anchor" href="#part-13" aria-label="链接到第四轮：把新证据交给 AI">#</a></h3>
+<pre><code class="language-text">这是刚刚查到的新证据：
+
+[粘贴日志、接口结果、字段对比或截图中的文字]
+
+请重新判断：
+1. 这条证据确定了什么；
+2. 排除了什么；
+3. 原来的猜测是否需要修改；
+4. 下一步只建议一个最有用的动作。
+</code></pre>
+<h3 id="part-14">第五轮：整理结论和回复<a class="anchor" href="#part-14" aria-label="链接到第五轮：整理结论和回复">#</a></h3>
+<pre><code class="language-text">请根据目前全部证据停止扩大查询，并整理结果。
+
+先写内部结论：
+1. 已确定的事实；
+2. 根因或当前最合理的判断；
+3. 还没有确认的内容；
+4. 处理建议和验证方法；
+5. 是否需要升级研发、二线或三方平台。
+
+再写一版客服可以发送的回复。
+对外回复不要包含源码路径、内部日志和无关的内部编号。
+</code></pre>
+<h2 id="part-15">4. 看 AI 回答时，只检查五件事<a class="anchor" href="#part-15" aria-label="链接到4. 看 AI 回答时，只检查五件事">#</a></h2>
+<ol>
+<li>它有没有把商家、订单、车辆、渠道和时间说对？</li>
+<li>它给的下一步是不是可以直接执行，而不是只说“查日志”？</li>
+<li>它有没有说明每个判断来自哪条日志、哪个接口或哪段代码？</li>
+<li>它有没有把“可能”写成“已经确定”？</li>
+<li>新证据出来后，它有没有更新原来的判断？</li>
+</ol>
+<h3 id="part-16">三句很好用的追问<a class="anchor" href="#part-16" aria-label="链接到三句很好用的追问">#</a></h3>
+<pre><code class="language-text">这条证据具体排除了哪个原因？
+</code></pre>
+<pre><code class="language-text">问题最早是从哪一步开始出现的？请给出前后两条证据。
+</code></pre>
+<pre><code class="language-text">如果你现在的判断是错的，哪条证据最容易把它推翻？
+</code></pre>
+<hr>
+<h1 id="part-17">第二部分：标准排障步骤<a class="anchor" href="#part-17" aria-label="链接到第二部分：标准排障步骤">#</a></h1>
+<h2 id="part-18">5. 第一步：把问题说清楚<a class="anchor" href="#part-18" aria-label="链接到5. 第一步：把问题说清楚">#</a></h2>
+<p>先确认三件事：</p>
+<ul>
+<li>用户看到的是什么。</li>
+<li>正常应该是什么。</li>
+<li>哪个对象、哪个时间、哪个渠道出了差异。</li>
+</ul>
+<p>不要一开始就说“同步失败”“代码有Bug”。这些是原因判断，不是现象。</p>
+<p>例如：</p>
+<ul>
+<li>现象：SaaS 已改成新车，携程仍显示旧车。</li>
+<li>不要写成：携程改排接口失败。</li>
+</ul>
+<h2 id="part-19">6. 第二步：先找问题出现在哪一段<a class="anchor" href="#part-19" aria-label="链接到6. 第二步：先找问题出现在哪一段">#</a></h2>
+<p>常见链路可以简单理解成：</p>
+<pre><code class="language-text">用户操作
+→ SaaS保存
+→ 生成消息或任务
+→ 中间服务处理
+→ 请求三方平台
+→ 三方返回或回调
+→ SaaS落库和页面展示
+</code></pre>
+<p>先找“哪一步开始不一样”，再查原因。不要一口气把所有服务都查一遍。</p>
+<h2 id="part-20">7. 第三步：只选1～3个最有用的检查<a class="anchor" href="#part-20" aria-label="链接到7. 第三步：只选1～3个最有用的检查">#</a></h2>
+<p>好的检查有两个特点：</p>
+<ul>
+<li>花的时间少。</li>
+<li>查完后能明显排除一个原因。</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li>费用少了20元：先看三方原始返回里有没有这20元。</li>
+<li>渠道还能下单：先看当时远端库存是不是还存在。</li>
+<li>支付失败：拿失败商家和正常商家的最终请求做对比。</li>
+<li>谁改了配置：先找到直接操作的 userId，再确认姓名。</li>
+</ul>
+<h2 id="part-21">8. 第四步：让 AI 分清四种内容<a class="anchor" href="#part-21" aria-label="链接到8. 第四步：让 AI 分清四种内容">#</a></h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>简单理解</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>事实</td>
+<td>日志或接口直接看到的内容</td>
+<td>RELEASE返回成功</td>
+</tr>
+<tr>
+<td>猜测</td>
+<td>根据事实推出来，但还没完全证明</td>
+<td>远端可能出现了无库存保护的时间段</td>
+</tr>
+<tr>
+<td>结论</td>
+<td>证据已经够，可以用来处理问题</td>
+<td>先释放后重建，重建失败后没有恢复</td>
+</tr>
+<tr>
+<td>未知</td>
+<td>当前还查不到</td>
+<td>三方内部为什么没有展示</td>
+</tr>
+</tbody></table></div>
+<p>可以直接这样问：</p>
+<pre><code class="language-text">请把回答分成“确定的事实、目前的猜测、可以下的结论、还不知道的内容”。
+每条事实都写明证据来源。没有证据的内容不要写成结论。
+</code></pre>
+<h2 id="part-22">9. 第五步：形成结论<a class="anchor" href="#part-22" aria-label="链接到9. 第五步：形成结论">#</a></h2>
+<p>一个合格结论至少要回答：</p>
+<ol>
+<li>问题发生在哪一步。</li>
+<li>直接原因是什么。</li>
+<li>哪些原因已经排除。</li>
+<li>现在怎么处理。</li>
+<li>处理后怎么确认已经恢复。</li>
+<li>还有什么没有确认。</li>
+</ol>
+<h2 id="part-23">10. 第六步：由人确认是否结束<a class="anchor" href="#part-23" aria-label="链接到10. 第六步：由人确认是否结束">#</a></h2>
+<p>AI 可以整理报告，但不能自己决定关闭问题。</p>
+<p>下面这些操作也必须由人确认：</p>
+<ul>
+<li>修改数据库。</li>
+<li>重推数据或补状态。</li>
+<li>修改商家、渠道或支付配置。</li>
+<li>退款、补扣或迁移余额。</li>
+<li>对外发送根因结论。</li>
+</ul>
+<hr>
+<h1 id="part-24">第三部分：我们遇到过哪些问题<a class="anchor" href="#part-24" aria-label="链接到第三部分：我们遇到过哪些问题">#</a></h1>
+<h2 id="part-25">11. 案例状态怎么理解<a class="anchor" href="#part-25" aria-label="链接到11. 案例状态怎么理解">#</a></h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>标记</th>
+<th>意思</th>
+<th>能不能当标准答案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span class="status status-closed">已关闭</span></td>
+<td>问题已经完成，有结论和证据</td>
+<td>可以</td>
+</tr>
+<tr>
+<td><span class="status status-concluded">有结论</span></td>
+<td>已经找到主要原因，但还没有最终关闭</td>
+<td>可以参考，同时保留未确认项</td>
+</tr>
+<tr>
+<td><span class="status status-progress">调查中</span></td>
+<td>有方向，但证据还不够</td>
+<td>只能学排查思路</td>
+</tr>
+<tr>
+<td><span class="status status-practice">待验证</span></td>
+<td>信息不足或刚开始处理</td>
+<td>不能当答案</td>
+</tr>
+</tbody></table></div>
+<p>当前共有58个 case：20个已关闭、21个有结论、6个调查中、11个待验证。</p>
+<h2 id="part-26">12. 8类常见问题<a class="anchor" href="#part-26" aria-label="链接到12. 8类常见问题">#</a></h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>用户常说的话</th>
+<th>属于哪类问题</th>
+<th>第一件要确认的事</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>取消了还占用、改排后冲突</td>
+<td>库存和改排</td>
+<td>冲突时远端库存到底还在不在</td>
+</tr>
+<tr>
+<td>订单、状态、价格没有同步</td>
+<td>渠道同步</td>
+<td>同步任务有没有产生，卡在哪一步</td>
+</tr>
+<tr>
+<td>少费用、优惠对不上</td>
+<td>金额和费用</td>
+<td>三方原始数据里有没有这笔钱</td>
+</tr>
+<tr>
+<td>服务圈、车型、门店没生效</td>
+<td>配置和映射</td>
+<td>本地配置、映射、三方真实数据是否一致</td>
+</tr>
+<tr>
+<td>谁改了这个配置</td>
+<td>操作记录</td>
+<td>先找到直接操作的 userId</td>
+</tr>
+<tr>
+<td>合同冲突、上报失败</td>
+<td>Open接口和合同</td>
+<td>是本地拦截、重复上报还是三方拒绝</td>
+</tr>
+<tr>
+<td>提现为0、欠费、支付失败</td>
+<td>账户和支付</td>
+<td>当前读的是哪个账户、哪个配置、哪套规则</td>
+</tr>
+<tr>
+<td>图片、GPS、状态不显示</td>
+<td>数据和页面展示</td>
+<td>数据没产生，还是页面没展示</td>
+</tr>
+</tbody></table></div>
+<h2 id="part-27">13. 58个 case 速查表<a class="anchor" href="#part-27" aria-label="链接到13. 58个 case 速查表">#</a></h2>
+<h3 id="part-28">13.1 2026年3月至4月10日<a class="anchor" href="#part-28" aria-label="链接到13.1 2026年3月至4月10日">#</a></h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Case</th>
+<th>状态</th>
+<th>发生了什么</th>
+<th>我们学到了什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span class="case-reference">CASE-20260321-110</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>哈啰库存没有同步</td>
+<td>消息到了中间服务，但没有发到 Hello 对应的消息通道</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260323-377</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>商户欠费后仍能使用</td>
+<td>欠费、关停和页面拦截不是同一套规则</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260323-639</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>哈啰订单取消后还占库存</td>
+<td>同步查询仍返回旧占用，本地没有删除库存</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260323-733</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>查询服务圈是谁修改的</td>
+<td>先确认保存动作和 userId，姓名要用用户主数据确认</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260324-343</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>订单多出无忧尊享费用</td>
+<td>费用在携程下单时就传进来了，不是后来人工添加</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260325-1013</span></td>
+<td><span class="status status-progress">调查中</span></td>
+<td>携程订单间隔没有生效</td>
+<td>后来重新保存已经补推，历史为什么没生效还缺证据</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260325-148</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>哈啰多显示20元平台优惠</td>
+<td>哈啰给 SaaS 的数据和用户页面展示口径不同</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260325-187</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>订单间隔是否推送携程</td>
+<td>原来没有生效，重新保存后才补推；历史数据没有自动补发</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260325-279</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>优惠总额一样，但明细不同</td>
+<td>三方只给了总优惠，没有单独给平台优惠字段</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260331-2109</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>余额为0算不算欠费</td>
+<td>有的地方用小于等于0，有的页面用小于0</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260401-979</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>改排后铁行库存丢失</td>
+<td>删除成功，重新添加时被限频，之后没有自动补回来</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260408-2109</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>一直收到“单据到期提醒”</td>
+<td>不同业务共用了同一个微信模板，标题和实际正文不是一回事</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260409-238</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>已分账但可提现余额为0</td>
+<td>历史钱在主账户，新页面只看个人子账户</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260410-065</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>合同开始时间晚于结束时间</td>
+<td>系统没有使用实际还车时间，计算出了错误的合同时间</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260410-854</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>合同上报提示重复</td>
+<td>取车流程已经自动上报，商户又手动上报了一次</td>
+</tr>
+</tbody></table></div>
+<h3 id="part-29">13.2 2026年4月14日至5月14日<a class="anchor" href="#part-29" aria-label="链接到13.2 2026年4月14日至5月14日">#</a></h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Case</th>
+<th>状态</th>
+<th>发生了什么</th>
+<th>我们学到了什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span class="case-reference">CASE-20260414-001</span></td>
+<td><span class="status status-progress">调查中</span></td>
+<td>线下单占用哈啰库存失败</td>
+<td>同步已经触发，但被上游拒绝；最终责任还要继续确认</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260414-569</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>悟空订单详情打不开</td>
+<td>先确认前端请求、后端错误和订单数据，当前不能下结论</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260415-001</span></td>
+<td><span class="status status-progress">调查中</span></td>
+<td>改牌后悟空首次同步失败</td>
+<td>上游先报重复 VIN，后来重试成功</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260415-549</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>哈啰服务圈无法同步</td>
+<td>接口整体返回成功，但少返回一个服务圈，本地代码又没有处理缺失情况</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260416-001</span></td>
+<td><span class="status status-progress">调查中</span></td>
+<td>悟空价格同步失败</td>
+<td>当前方向是缺少非本地标准车型映射</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260417-508</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>取车选了保险，费用却没显示</td>
+<td>加购步骤失败，但主取车流程没有拦住，最后显示取车成功</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260417-876</span></td>
+<td><span class="status status-progress">调查中</span></td>
+<td>基础同步后免费接送自动开启</td>
+<td>可能是基础同步字段带来了额外修改，还要继续确认代码</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260417-992</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>强制改排后出现库存重叠</td>
+<td>本地库存已经换到新车，但 Hello 侧车辆可能没有同步更新</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260421-417</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>验证服务圈修复是否有效</td>
+<td>修复后能发现旧 ID 失效，并自动用新 ID 再试一次</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260424-380</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>改回原车后滴滴仍显示旧车</td>
+<td>发给滴滴的请求用了修改前的旧车辆信息</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260424-6192543</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>滴滴改排后仍显示旧车牌</td>
+<td>同类问题：请求拿了旧车字段</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260426-333-didi-stock-conflict</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>滴滴订单库存冲突</td>
+<td>强制改排后，本地库存和渠道库存没有保持一致</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260428-001</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>订单详情和导出金额不同</td>
+<td>导出时漏算了一类正向费用</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260428-2109</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>基础版铁行订单仍被抽佣</td>
+<td>另一条账单入口没有使用基础版免佣规则</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260429-670</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>携程异地取还车规则找不到</td>
+<td>看到规则引用缺失，但还缺源码和数据确认</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260430-ctrip-999-rent-fee</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>携程订单租车费没有显示</td>
+<td>一种特殊费用编码没有正确转成 SaaS 租车费</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260504-ctrip-dispatch-1128146968627582</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>SaaS改了新车，携程还显示旧车</td>
+<td>多次回调用了同一个去重编号，携程很可能只处理了第一条</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260507-hello-order-rc202605067381690268779382581</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>Hello订单没有进入SaaS</td>
+<td>Hello一直返回待支付，SaaS按规则跳过了这笔订单</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260512-6332560-illegal-transfer-upload-failure</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>合同失败但页面没有原因</td>
+<td>后端已经有失败原因，前端只显示状态，没有显示原因字段</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260512-6337504-hello-pickup-status-unsynced</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>哈啰已取车，SaaS状态没变</td>
+<td>当前证据说明取车状态没有进入回调链路，不能说是收到后没保存</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260514-360-stock-conflict</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>三笔订单占用同一辆车</td>
+<td>两次强制改排和后续 Hello 订单形成了真实时间重叠</td>
+</tr>
+</tbody></table></div>
+<h3 id="part-30">13.3 2026年6月至7月28日<a class="anchor" href="#part-30" aria-label="链接到13.3 2026年6月至7月28日">#</a></h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Case</th>
+<th>状态</th>
+<th>发生了什么</th>
+<th>我们学到了什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span class="case-reference">CASE-20260604-777</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>铁行休息时间没同步</td>
+<td>本地认为映射没变，所以没有发现三方数据已经丢失</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260701-6463648-ctrip-fee-diff</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>携程和SaaS费用不同</td>
+<td>携程有一笔没有费用编码的84元，SaaS无法识别；名称仍需携程确认</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260706-081</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>铁行订单少了40元优惠</td>
+<td>还没闭环，要先对比三方原始优惠、SaaS保存和页面展示</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260716-241</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>续租库存占用缺失</td>
+<td>Hello强行创建订单后没有返回这段占用，SaaS也就没有创建本地库存</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260719-2164-ctrip-service-circle-fee</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>携程页面不显示服务圈收费</td>
+<td>本地配置和同步都正常，问题范围已经缩到携程页面的匹配和展示规则</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260727-6443005-ctrip-renew-unsynced</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>SaaS续租后携程订单时长没变</td>
+<td>这是业务规则：线下续租只同步库存，不改携程主订单</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260728-737</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>图片、视频部分不显示</td>
+<td>可能涉及保存条件、字段放错位置或文件预览问题，当前不能定根因</td>
+</tr>
+</tbody></table></div>
+<h3 id="part-31">13.4 2026年7月29日至8月3日<a class="anchor" href="#part-31" aria-label="链接到13.4 2026年7月29日至8月3日">#</a></h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Case</th>
+<th>状态</th>
+<th>发生了什么</th>
+<th>我们学到了什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span class="case-reference">CASE-20260729-954</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>查询携程价格修改记录</td>
+<td>先补保存时间、门店和车型，再查操作记录</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260730-479</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>查询两个门店的价格修改人</td>
+<td>要把配置变化、同步动作、userId和姓名分开查</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260730-639</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>GPS设备不在管理页</td>
+<td>先确认设备、商家、车辆绑定和页面筛选条件</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260731-925</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>车型改了，哈啰还是旧车型</td>
+<td>SaaS车型已变，哈啰商品映射没有跟着更新</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260731-943</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>车辆一直显示携程审核失败</td>
+<td>页面显示的是旧失败状态，新保存也没有触发携程重审</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260731-947</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>微信小程序支付失败</td>
+<td>商家的微信子商户号没配置，请求缺少必填字段</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260803-1402-hello-model-hidden</span></td>
+<td><span class="status status-closed">已关闭</span></td>
+<td>哈啰车型当天不展示</td>
+<td>已排除本地库存、停售和价格，问题范围在哈啰搜索或展示规则</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260803-1402-hello-price-143502</span></td>
+<td><span class="status status-progress">调查中</span></td>
+<td>哈啰价格没更新</td>
+<td>正在比较保存、任务、映射和哈啰返回，当前还不能定原因</td>
+</tr>
+</tbody></table></div>
+<h3 id="part-32">13.5 2026年8月4日至8月10日<a class="anchor" href="#part-32" aria-label="链接到13.5 2026年8月4日至8月10日">#</a></h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Case</th>
+<th>状态</th>
+<th>发生了什么</th>
+<th>我们学到了什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><span class="case-reference">CASE-20260804-380</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>换车和调拨后库存错位</td>
+<td>两个事件到达顺序不一致，后面也没有重新绑定库存</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260804-380-d131f0</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>粤D131F0库存冲突</td>
+<td>先释放旧库存，重新添加失败，旧库存没有恢复</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260804-380-d8387t</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>粤D8387T库存冲突</td>
+<td>滴滴改排失败，但SaaS仍改了本地车辆；条件恢复后也没有重试</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260804-615</span></td>
+<td><span class="status status-concluded">有结论</span></td>
+<td>哈啰和滴滴库存冲突</td>
+<td>先释放后重建，重建失败后长时间没有自动恢复</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260806-549</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>扣款审核被驳回</td>
+<td>还要确认是谁驳回、哪次提交、具体原因和审核材料</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260807-874</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>免费接送同步成1分钟</td>
+<td>还要比较本地单位、发送字段和三方最终展示</td>
+</tr>
+<tr>
+<td><span class="case-reference">CASE-20260810-400</span></td>
+<td><span class="status status-practice">待验证</span></td>
+<td>极氪009价格没同步滴滴</td>
+<td>先补修改时间，再查任务、车型映射和滴滴请求</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h1 id="part-33">第四部分：7个常用提示词<a class="anchor" href="#part-33" aria-label="链接到第四部分：7个常用提示词">#</a></h1>
+<h2 id="part-34">14. 信息不够时<a class="anchor" href="#part-34" aria-label="链接到14. 信息不够时">#</a></h2>
+<pre><code class="language-text">先不要查原因。请帮我从下面的描述中提取商家、订单、车辆、渠道、时间、金额和错误码。
+然后只问我最多3个最关键的问题，并说明每个问题会决定下一步查什么。
+
+[粘贴用户原话]
+</code></pre>
+<h2 id="part-35">15. 找相似历史 case<a class="anchor" href="#part-35" aria-label="链接到15. 找相似历史 case">#</a></h2>
+<pre><code class="language-text">请根据下面的渠道、对象和现象，最多找3个最像的历史case。
+只告诉我：为什么像、第一步查什么、容易误判什么。
+不要直接使用旧case的根因。
+
+渠道：[填写]
+对象：[填写]
+现象：[填写]
+关键词或错误码：[填写]
+</code></pre>
+<h2 id="part-36">16. 查日志<a class="anchor" href="#part-36" aria-label="链接到16. 查日志">#</a></h2>
+<pre><code class="language-text">这次查日志只回答一个问题：[填写本轮要确认的问题]。
+
+对象：[填写]
+时间范围：[填写]
+已有关键词或traceId：[填写]
+
+请先确定应该查哪个日志库，再查询。
+返回：
+1. 实际查询范围；
+2. 按时间排序的关键事件，最多10条；
+3. 每条事件证明或排除了什么；
+4. 没有找到哪些关键事件；
+5. 这个问题现在能不能回答；
+6. 下一步只推荐一个动作。
+
+不要贴大段原始日志。
+</code></pre>
+<h2 id="part-37">17. 查代码<a class="anchor" href="#part-37" aria-label="链接到17. 查代码">#</a></h2>
+<pre><code class="language-text">请用本地源码确认下面的问题，不要根据经验猜。
+
+要确认的问题：[例如：改排请求用新车还是旧车]
+已知日志或接口结果：[填写]
+可能涉及的工程：[填写]
+
+请先检查本地有没有对应源码。没有就停止并告诉我需要补哪个工程。
+有源码时，请告诉我：
+1. 从哪个入口走到这里；
+2. 使用了哪个条件和字段；
+3. 会不会写库、发消息或调用三方；
+4. 失败后会不会重试或恢复；
+5. 代码是否能解释现有日志。
+
+只读代码，不修改文件。
+</code></pre>
+<h2 id="part-38">18. 对比两个系统的数据<a class="anchor" href="#part-38" aria-label="链接到18. 对比两个系统的数据">#</a></h2>
+<pre><code class="language-text">请帮我对比[对象]在两个系统里的[价格/费用/状态/车辆/配置]。
+
+系统A：[字段和值]
+系统B：[字段和值]
+其他已知节点：[填写]
+
+请按顺序列出每一步的输入和输出，找到数据第一次不一样的地方。
+先区分主单和续租、商家应收和用户实付、总额和明细，不要把不同口径直接当成数据丢失。
+</code></pre>
+<h2 id="part-39">19. 收敛结论<a class="anchor" href="#part-39" aria-label="链接到19. 收敛结论">#</a></h2>
+<pre><code class="language-text">请不要再扩大查询范围，帮我整理当前结论。
+
+要求：
+1. 列出确定的事实和证据；
+2. 列出还在猜的原因；
+3. 写清哪些原因已经排除；
+4. 给出当前最合理的结论和信心程度；
+5. 区分直接原因、真正的系统问题和用户看到问题的地方；
+6. 说出最后一条最值得补的证据；如果不值得继续，就建议停止。
+</code></pre>
+<h2 id="part-40">20. 写对外回复<a class="anchor" href="#part-40" aria-label="链接到20. 写对外回复">#</a></h2>
+<pre><code class="language-text">请先检查下面的结论有没有把猜测写成事实，再写一版给[业务/客服/商家]看的回复。
+
+当前结论：[填写]
+关键证据：[填写]
+还没确认的内容：[填写]
+
+回复请按“现象确认、当前判断、影响、处理建议、还需配合的信息”来写。
+使用普通业务语言，不要暴露源码路径、内部日志和无关的内部编号。
+</code></pre>
+<hr>
+<h1 id="part-41">第五部分：8类问题怎么问<a class="anchor" href="#part-41" aria-label="链接到第五部分：8类问题怎么问">#</a></h1>
+<p>这一部分不是用来替代“万能提问模板”的。</p>
+<p>客服实际使用时，按照下面的方法组合：</p>
+<pre><code class="language-text">万能提问模板
++
+对应场景的附加问法
+</code></pre>
+<p>例如，用户说“价格没有同步到滴滴”，先填写商家、车型、时间和两边价格，再追加“渠道同步”或“价格费用”的标准问法。</p>
+<p>每个场景都固定回答六件事：什么时候使用、还要提供什么、追加什么问法、AI应该返回什么、下一轮怎么追问、什么时候停止或升级。</p>
+<h2 id="part-42">21. 库存、改排、调拨和续租<a class="anchor" href="#part-42" aria-label="链接到21. 库存、改排、调拨和续租">#</a></h2>
+<h3 id="part-43">什么情况使用<a class="anchor" href="#part-43" aria-label="链接到什么情况使用">#</a></h3>
+<ul>
+<li>用户说取消后还占车、改排后冲突、续租没有占库存。</li>
+<li>同一辆车在相同时间出现两笔或多笔订单。</li>
+<li>SaaS和渠道显示的占用车辆不一样。</li>
+</ul>
+<h3 id="part-44">必须补充的信息<a class="anchor" href="#part-44" aria-label="链接到必须补充的信息">#</a></h3>
+<ul>
+<li>订单号、渠道订单号、车辆和车牌。</li>
+<li>每笔订单的开始和结束时间。</li>
+<li>改排、取消、取车、还车、调拨、续租的时间。</li>
+<li>本地库存编号和三方库存编号。</li>
+</ul>
+<h3 id="part-45">追加这段标准问法<a class="anchor" href="#part-45" aria-label="链接到追加这段标准问法">#</a></h3>
+<pre><code class="language-text">请先确认这些订单是不是真的在同一辆车、同一时间重叠。
+然后按时间列出库存的新增、更新、删除、释放和重试。
+重点回答：新订单创建时，原来的三方库存还在不在？
+如果先删除成功、再新增失败，请继续查系统有没有自动恢复。
+</code></pre>
+<h3 id="part-46">AI应该返回<a class="anchor" href="#part-46" aria-label="链接到AI应该返回">#</a></h3>
+<ul>
+<li>一条按时间排序的库存变化表。</li>
+<li>冲突发生时，本地库存和三方库存分别是什么状态。</li>
+<li>第一次出现差异的位置，以及对应证据。</li>
+<li>是否存在删除成功、新增失败、失败后没有恢复。</li>
+</ul>
+<h3 id="part-47">下一轮这样追问<a class="anchor" href="#part-47" aria-label="链接到下一轮这样追问">#</a></h3>
+<pre><code class="language-text">请只回答一个问题：新订单创建的那个时间点，原来的三方库存是否还存在？
+请给出这个时间点前后最关键的两条证据。
+</code></pre>
+<h3 id="part-48">停止或升级<a class="anchor" href="#part-48" aria-label="链接到停止或升级">#</a></h3>
+<ul>
+<li>已经确认库存操作顺序，但需要重建库存、补状态或改数据时，升级研发或二线。</li>
+<li>本地记录完整、三方最终库存仍不一致时，整理请求和响应后升级三方平台。</li>
+<li>缺少订单时间或车辆编号时，停止猜测，先向用户补信息。</li>
+</ul>
+<h3 id="part-49">容易搞错<a class="anchor" href="#part-49" aria-label="链接到容易搞错">#</a></h3>
+<ul>
+<li>渠道能下单，不一定是渠道没校验；可能是我们的远端库存已经被释放。</li>
+<li>改排成功，不代表三方也已经换车成功。</li>
+<li>只看计划还车时间，会漏掉实际还车延长出的占用。</li>
+</ul>
+<p><strong>参考：</strong><span class="case-reference">CASE-20260804-615</span>、<span class="case-reference">CASE-20260401-979</span>。</p>
+<h2 id="part-50">22. 渠道同步<a class="anchor" href="#part-50" aria-label="链接到22. 渠道同步">#</a></h2>
+<h3 id="part-51">什么情况使用<a class="anchor" href="#part-51" aria-label="链接到什么情况使用">#</a></h3>
+<ul>
+<li>用户说订单、价格、车辆、状态或配置没有同步。</li>
+<li>SaaS已经保存成功，但三方平台没有变化。</li>
+<li>三方已经变化，SaaS页面仍显示旧数据。</li>
+</ul>
+<h3 id="part-52">必须补充的信息<a class="anchor" href="#part-52" aria-label="链接到必须补充的信息">#</a></h3>
+<ul>
+<li>SaaS对象编号和三方对象编号。</li>
+<li>触发时间和两个系统当前状态。</li>
+<li>已知 traceId、请求、响应或回调编号。</li>
+</ul>
+<h3 id="part-53">追加这段标准问法<a class="anchor" href="#part-53" aria-label="链接到追加这段标准问法">#</a></h3>
+<pre><code class="language-text">请按“用户操作→SaaS保存→生成任务→中间服务→请求三方→三方回调→页面展示”逐步检查。
+每一步写清输入、输出、时间和证据。
+先找到哪一步开始不一样，再查原因。
+接口返回成功后，还要确认返回数据完整、三方最终状态正确。
+</code></pre>
+<h3 id="part-54">AI应该返回<a class="anchor" href="#part-54" aria-label="链接到AI应该返回">#</a></h3>
+<ul>
+<li>一张同步链路表，写清每一步是否执行。</li>
+<li>数据第一次出现差异的位置。</li>
+<li>成功响应是否完整、回调是否到达、页面是否使用最新值。</li>
+<li>下一步最值得检查的一个节点。</li>
+</ul>
+<h3 id="part-55">下一轮这样追问<a class="anchor" href="#part-55" aria-label="链接到下一轮这样追问">#</a></h3>
+<pre><code class="language-text">请不要重复整条链路，只检查刚才发现异常的这一段：[填写步骤]。
+告诉我它的输入、输出、证据和失败后的处理方式。
+</code></pre>
+<h3 id="part-56">停止或升级<a class="anchor" href="#part-56" aria-label="链接到停止或升级">#</a></h3>
+<ul>
+<li>找不到明确时间时，不允许无范围地扫描全部日志，先补时间。</li>
+<li>已确认请求正确、三方最终状态错误时，带请求和响应升级三方平台。</li>
+<li>已确认任务未产生、消息丢失或失败后没有重试时，升级研发。</li>
+</ul>
+<h3 id="part-57">容易搞错<a class="anchor" href="#part-57" aria-label="链接到容易搞错">#</a></h3>
+<ul>
+<li><code>success=true</code> 不代表每一条数据都成功。</li>
+<li>发出消息不代表三方已经处理。</li>
+<li>多次回调使用同一个去重编号，后面的内容可能不会生效。</li>
+</ul>
+<p><strong>参考：</strong><span class="case-reference">CASE-20260321-110</span>、<span class="case-reference">CASE-20260504-ctrip-dispatch-1128146968627582</span>。</p>
+<h2 id="part-58">23. 价格、费用、优惠和抽佣<a class="anchor" href="#part-58" aria-label="链接到23. 价格、费用、优惠和抽佣">#</a></h2>
+<h3 id="part-59">什么情况使用<a class="anchor" href="#part-59" aria-label="链接到什么情况使用">#</a></h3>
+<ul>
+<li>用户说两个页面的总价、优惠、保险、服务费或抽佣不一致。</li>
+<li>三方订单和SaaS订单的金额不同。</li>
+<li>订单详情、账单和导出金额不同。</li>
+</ul>
+<h3 id="part-60">必须补充的信息<a class="anchor" href="#part-60" aria-label="链接到必须补充的信息">#</a></h3>
+<ul>
+<li>主订单和续租订单。</li>
+<li>两个页面的总金额和明细。</li>
+<li>三方原始请求/返回、SaaS保存结果和页面结果。</li>
+</ul>
+<h3 id="part-61">追加这段标准问法<a class="anchor" href="#part-61" aria-label="链接到追加这段标准问法">#</a></h3>
+<pre><code class="language-text">请先分清：主单还是续租、商家应收还是用户实付、总优惠还是优惠明细。
+然后按“三方原始数据→中间服务→SaaS保存→页面/导出”逐步对比。
+先找到金额第一次不同的地方，再判断是三方没给、SaaS没识别、保存漏了还是页面没展示。
+</code></pre>
+<h3 id="part-62">AI应该返回<a class="anchor" href="#part-62" aria-label="链接到AI应该返回">#</a></h3>
+<ul>
+<li>一张金额和费用字段对比表。</li>
+<li>每个金额属于哪个订单、哪个角色、哪个计算口径。</li>
+<li>金额第一次不一致的位置。</li>
+<li>差异属于三方未提供、字段未识别、保存遗漏、计算规则还是页面展示。</li>
+</ul>
+<h3 id="part-63">下一轮这样追问<a class="anchor" href="#part-63" aria-label="链接到下一轮这样追问">#</a></h3>
+<pre><code class="language-text">请只追踪这笔差额：[填写金额和费用名称]。
+从三方原始数据开始，逐步列出它的字段名、原始值、保存值和展示值。
+</code></pre>
+<h3 id="part-64">停止或升级<a class="anchor" href="#part-64" aria-label="链接到停止或升级">#</a></h3>
+<ul>
+<li>三方原始数据没有费用名称或编码时，停止猜测名称，升级三方确认。</li>
+<li>已确认计算或转换规则漏项时，带字段对比升级研发。</li>
+<li>涉及退款、补扣、余额迁移时，不允许AI直接执行，必须人工确认。</li>
+</ul>
+<h3 id="part-65">容易搞错<a class="anchor" href="#part-65" aria-label="链接到容易搞错">#</a></h3>
+<ul>
+<li>总金额一样，不代表明细完整。</li>
+<li>页面没有保险，不代表用户没有选择。</li>
+<li>普通订单有免佣规则，不代表其他订单入口也有。</li>
+</ul>
+<p><strong>参考：</strong><span class="case-reference">CASE-20260324-343</span>、<span class="case-reference">CASE-20260417-508</span>。</p>
+<h2 id="part-66">24. 门店、服务圈、车型和映射<a class="anchor" href="#part-66" aria-label="链接到24. 门店、服务圈、车型和映射">#</a></h2>
+<h3 id="part-67">什么情况使用<a class="anchor" href="#part-67" aria-label="链接到什么情况使用">#</a></h3>
+<ul>
+<li>门店、车型、车辆或服务圈保存后没有生效。</li>
+<li>SaaS显示的对象和三方平台不是同一个。</li>
+<li>系统提示存在映射，但三方仍找不到或显示旧数据。</li>
+</ul>
+<h3 id="part-68">必须补充的信息<a class="anchor" href="#part-68" aria-label="链接到必须补充的信息">#</a></h3>
+<ul>
+<li>本地门店、车型、车辆或服务圈编号。</li>
+<li>三方对象编号。</li>
+<li>本地配置、本地映射和三方当前值。</li>
+</ul>
+<h3 id="part-69">追加这段标准问法<a class="anchor" href="#part-69" aria-label="链接到追加这段标准问法">#</a></h3>
+<pre><code class="language-text">请分别确认三件事：
+1. SaaS配置是不是正确；
+2. 本地保存的三方映射是不是正确；
+3. 三方平台上的真实数据是不是还存在、是不是最新。
+
+不要因为本地有映射，就认为三方一定有数据。
+如果保存成功但没有变化，请检查有没有生成同步任务、有没有因为旧映射而跳过更新。
+</code></pre>
+<h3 id="part-70">AI应该返回<a class="anchor" href="#part-70" aria-label="链接到AI应该返回">#</a></h3>
+<ul>
+<li>SaaS配置、本地映射、三方真实数据三栏对比。</li>
+<li>映射指向的三方对象是否真实存在、是否最新。</li>
+<li>保存后有没有生成同步任务，是否被旧映射或条件判断跳过。</li>
+<li>第一个不一致的字段或对象。</li>
+</ul>
+<h3 id="part-71">下一轮这样追问<a class="anchor" href="#part-71" aria-label="链接到下一轮这样追问">#</a></h3>
+<pre><code class="language-text">请只验证这个映射是否仍然有效：[填写本地ID和三方ID]。
+不要只看本地映射表，还要用三方返回或同步结果确认对象真实存在。
+</code></pre>
+<h3 id="part-72">停止或升级<a class="anchor" href="#part-72" aria-label="链接到停止或升级">#</a></h3>
+<ul>
+<li>没有本地ID或三方ID时，先补编号，不凭名称猜对象。</li>
+<li>确认映射脏数据、需要重绑或补同步时，升级研发或二线。</li>
+<li>三方对象存在但搜索页面不展示时，升级三方确认展示规则。</li>
+</ul>
+<h3 id="part-73">容易搞错<a class="anchor" href="#part-73" aria-label="链接到容易搞错">#</a></h3>
+<ul>
+<li>本地有三方 ID，不代表三方对象还存在。</li>
+<li>接口整体成功，不代表每个服务圈都返回成功。</li>
+<li>保存成功，不代表一定生成了渠道任务。</li>
+</ul>
+<p><strong>参考：</strong><span class="case-reference">CASE-20260415-549</span>、<span class="case-reference">CASE-20260604-777</span>。</p>
+<h2 id="part-74">25. 操作记录<a class="anchor" href="#part-74" aria-label="链接到25. 操作记录">#</a></h2>
+<h3 id="part-75">什么情况使用<a class="anchor" href="#part-75" aria-label="链接到什么情况使用">#</a></h3>
+<ul>
+<li>用户问“谁修改了价格、服务圈、门店或其他配置”。</li>
+<li>需要确认修改时间、修改前后的值或操作账号。</li>
+<li>系统操作和人工操作可能同时存在。</li>
+</ul>
+<h3 id="part-76">必须补充的信息<a class="anchor" href="#part-76" aria-label="链接到必须补充的信息">#</a></h3>
+<ul>
+<li>商家、门店和被修改对象的编号。</li>
+<li>大概时间和动作类型。</li>
+<li>你要找的是系统动作、userId还是姓名。</li>
+</ul>
+<h3 id="part-77">追加这段标准问法<a class="anchor" href="#part-77" aria-label="链接到追加这段标准问法">#</a></h3>
+<pre><code class="language-text">请查这个对象在指定时间内的保存或修改记录。
+先确认配置什么时候变了，再确认直接操作的userId。
+如果需要姓名，只能用用户主数据或后台截图确认，不能根据历史印象猜。
+如果有多条记录，请按时间倒序列出前值、后值、动作和userId。
+</code></pre>
+<h3 id="part-78">AI应该返回<a class="anchor" href="#part-78" aria-label="链接到AI应该返回">#</a></h3>
+<ul>
+<li>修改时间、修改对象、修改前值、修改后值和userId。</li>
+<li>这条记录是用户操作、系统任务还是消息消费。</li>
+<li>userId是否可以确认，姓名是否有可靠来源。</li>
+<li>如果记录不完整，明确缺的是哪一段审计数据。</li>
+</ul>
+<h3 id="part-79">下一轮这样追问<a class="anchor" href="#part-79" aria-label="链接到下一轮这样追问">#</a></h3>
+<pre><code class="language-text">请把“直接修改配置的账号”和“后续消费消息的系统账号”分开。
+我只需要确认直接操作的userId，并说明证据来源。
+</code></pre>
+<h3 id="part-80">停止或升级<a class="anchor" href="#part-80" aria-label="链接到停止或升级">#</a></h3>
+<ul>
+<li>只能确认userId、没有用户主数据时，停止猜姓名。</li>
+<li>没有明确对象或时间范围时，先补信息，不扫描全部操作记录。</li>
+<li>审计记录缺失或需要恢复配置时，升级研发或管理员。</li>
+</ul>
+<h3 id="part-81">容易搞错<a class="anchor" href="#part-81" aria-label="链接到容易搞错">#</a></h3>
+<ul>
+<li>消费消息的系统账号，不一定是前台操作人。</li>
+<li>消息时间不一定等于用户点击时间。</li>
+<li>userId能确认，不代表姓名也已经确认。</li>
+</ul>
+<p><strong>参考：</strong><span class="case-reference">CASE-20260323-733</span>。</p>
+<h2 id="part-82">26. Open接口和合同上报<a class="anchor" href="#part-82" aria-label="链接到26. Open接口和合同上报">#</a></h2>
+<h3 id="part-83">什么情况使用<a class="anchor" href="#part-83" aria-label="链接到什么情况使用">#</a></h3>
+<ul>
+<li>Open API调用失败、合同上报失败或提示合同重复。</li>
+<li>页面只显示失败状态，没有显示具体原因。</li>
+<li>自动上报和商户人工上报可能同时发生。</li>
+</ul>
+<h3 id="part-84">必须补充的信息<a class="anchor" href="#part-84" aria-label="链接到必须补充的信息">#</a></h3>
+<ul>
+<li>接口名、商户、订单、车牌、合同号和时间。</li>
+<li>完整错误码、错误文案和三方订单号。</li>
+<li>取车、还车、自动上报和人工上报的顺序。</li>
+</ul>
+<h3 id="part-85">追加这段标准问法<a class="anchor" href="#part-85" aria-label="链接到追加这段标准问法">#</a></h3>
+<pre><code class="language-text">请按“本地检查→系统自动上报→商户主动上报→三方返回→页面展示”逐步排查。
+检查同一个订单或车牌是不是已经被另一条流程先上报了。
+同时对比三方返回的错误原因、后端保存的原因和页面实际显示的字段。
+</code></pre>
+<h3 id="part-86">AI应该返回<a class="anchor" href="#part-86" aria-label="链接到AI应该返回">#</a></h3>
+<ul>
+<li>自动上报和人工上报的完整时间顺序。</li>
+<li>第一次上报是否成功，后续请求为什么被拒绝。</li>
+<li>三方原始错误、后端保存内容和页面展示的差异。</li>
+<li>当前是本地拦截、重复请求、三方拒绝还是页面漏展示。</li>
+</ul>
+<h3 id="part-87">下一轮这样追问<a class="anchor" href="#part-87" aria-label="链接到下一轮这样追问">#</a></h3>
+<pre><code class="language-text">请只检查同一个订单或车牌是否走了两条上报路径。
+按时间列出第一次和第二次请求的发起方、合同号、返回结果和证据。
+</code></pre>
+<h3 id="part-88">停止或升级<a class="anchor" href="#part-88" aria-label="链接到停止或升级">#</a></h3>
+<ul>
+<li>缺少完整错误码和发生时间时，先补信息，不根据错误简称猜原因。</li>
+<li>已确认自动和人工两条路径重复执行时，升级研发处理流程问题。</li>
+<li>本地请求合规但三方拒绝时，带完整请求和响应升级三方平台。</li>
+</ul>
+<h3 id="part-89">容易搞错<a class="anchor" href="#part-89" aria-label="链接到容易搞错">#</a></h3>
+<ul>
+<li>提示合同已存在，不一定是历史脏数据，可能是系统刚刚自动创建的。</li>
+<li>页面没显示原因，不代表后端没有原因。</li>
+<li>最后一次错误不一定是第一次失败的原因。</li>
+</ul>
+<p><strong>参考：</strong><span class="case-reference">CASE-20260410-854</span>、<span class="case-reference">CASE-20260512-6332560-illegal-transfer-upload-failure</span>。</p>
+<h2 id="part-90">27. 账户、欠费、提现和支付<a class="anchor" href="#part-90" aria-label="链接到27. 账户、欠费、提现和支付">#</a></h2>
+<h3 id="part-91">什么情况使用<a class="anchor" href="#part-91" aria-label="链接到什么情况使用">#</a></h3>
+<ul>
+<li>用户说已经分账但不能提现、余额为0、欠费状态不一致。</li>
+<li>微信或其他渠道支付失败。</li>
+<li>不同页面显示的账户余额或状态不同。</li>
+</ul>
+<h3 id="part-92">必须补充的信息<a class="anchor" href="#part-92" aria-label="链接到必须补充的信息">#</a></h3>
+<ul>
+<li>商户、订单、支付单和商户版本。</li>
+<li>主账户、个人子账户、余额、分账和提现记录。</li>
+<li>支付请求和三方返回。</li>
+</ul>
+<h3 id="part-93">追加这段标准问法<a class="anchor" href="#part-93" aria-label="链接到追加这段标准问法">#</a></h3>
+<pre><code class="language-text">请先确认这个页面和接口读的是主账户、个人子账户，还是合计余额。
+再确认分账的钱实际进入了哪个账户。
+如果是支付失败，请把失败商家和正常商家的最终请求做字段对比，找到缺少或不同的配置。
+如果是欠费问题，请分别检查欠费判断、关停任务和页面显示使用的条件。
+</code></pre>
+<h3 id="part-94">AI应该返回<a class="anchor" href="#part-94" aria-label="链接到AI应该返回">#</a></h3>
+<ul>
+<li>主账户、个人子账户和页面查询口径的对比。</li>
+<li>分账、余额变化、提现或支付请求的时间顺序。</li>
+<li>失败请求与正常请求之间缺少或不同的字段。</li>
+<li>欠费判断、关停任务和页面展示是否使用同一套条件。</li>
+</ul>
+<h3 id="part-95">下一轮这样追问<a class="anchor" href="#part-95" aria-label="链接到下一轮这样追问">#</a></h3>
+<pre><code class="language-text">请只对比这笔失败请求和一笔正常请求。
+列出所有不同字段，并按“最可能影响结果”的顺序排序。
+不要直接修改账户或支付配置。
+</code></pre>
+<h3 id="part-96">停止或升级<a class="anchor" href="#part-96" aria-label="链接到停止或升级">#</a></h3>
+<ul>
+<li>涉及资金、退款、补扣、余额迁移或提现操作时，必须停止自动处理并升级人工确认。</li>
+<li>已确认缺少支付配置时，交由有权限的人员核对和修改。</li>
+<li>三方支付返回不明确时，保留完整请求和响应并升级支付渠道。</li>
+</ul>
+<h3 id="part-97">容易搞错<a class="anchor" href="#part-97" aria-label="链接到容易搞错">#</a></h3>
+<ul>
+<li>分账成功，不代表钱进入当前页面读取的账户。</li>
+<li>余额为0，不一定在所有地方都算欠费。</li>
+<li>“商户号格式错误”不一定是公共商户号错误，也可能缺少子商户号。</li>
+</ul>
+<p><strong>参考：</strong><span class="case-reference">CASE-20260409-238</span>、<span class="case-reference">CASE-20260731-947</span>。</p>
+<h2 id="part-98">28. 图片、GPS、状态和页面展示<a class="anchor" href="#part-98" aria-label="链接到28. 图片、GPS、状态和页面展示">#</a></h2>
+<h3 id="part-99">什么情况使用<a class="anchor" href="#part-99" aria-label="链接到什么情况使用">#</a></h3>
+<ul>
+<li>图片、视频或附件已经上传，但页面不显示或打不开。</li>
+<li>GPS设备存在，但设备管理或车辆页面找不到。</li>
+<li>三方状态已经变化，SaaS页面仍显示旧状态。</li>
+</ul>
+<h3 id="part-100">必须补充的信息<a class="anchor" href="#part-100" aria-label="链接到必须补充的信息">#</a></h3>
+<ul>
+<li>订单、车辆或设备编号。</li>
+<li>上传、绑定或状态变化的时间。</li>
+<li>页面、接口返回和文件地址。</li>
+</ul>
+<h3 id="part-101">追加这段标准问法<a class="anchor" href="#part-101" aria-label="链接到追加这段标准问法">#</a></h3>
+<pre><code class="language-text">请按“数据有没有产生→后端有没有保存→接口有没有返回→前端有没有使用→文件能不能访问”逐步检查。
+如果是状态问题，要区分“回调根本没到”和“回调到了但没保存”。
+如果是GPS，要确认设备、供应商、商家、车辆和页面筛选条件。
+</code></pre>
+<h3 id="part-102">AI应该返回<a class="anchor" href="#part-102" aria-label="链接到AI应该返回">#</a></h3>
+<ul>
+<li>数据产生、保存、接口返回、页面使用和文件访问五个节点的检查结果。</li>
+<li>数据第一次缺失或不一致的位置。</li>
+<li>GPS设备从供应商到商家和车辆的完整绑定关系。</li>
+<li>状态问题属于没有回调、保存失败还是页面没有展示。</li>
+</ul>
+<h3 id="part-103">下一轮这样追问<a class="anchor" href="#part-103" aria-label="链接到下一轮这样追问">#</a></h3>
+<pre><code class="language-text">请只验证数据第一次消失的这个节点：[填写节点]。
+告诉我上一节点实际输出了什么、这一节点实际收到什么，并给出证据。
+</code></pre>
+<h3 id="part-104">停止或升级<a class="anchor" href="#part-104" aria-label="链接到停止或升级">#</a></h3>
+<ul>
+<li>缺少设备、订单或文件编号时，先补编号，不凭页面截图猜数据。</li>
+<li>后端接口已经返回正确数据、前端没有展示时，升级前端研发。</li>
+<li>回调未到且本地请求正常时，整理时间和编号后升级三方平台。</li>
+</ul>
+<h3 id="part-105">容易搞错<a class="anchor" href="#part-105" aria-label="链接到容易搞错">#</a></h3>
+<ul>
+<li>页面不显示，不等于后端没保存。</li>
+<li>App跳转三方完成操作，不代表App自己会把状态写回来。</li>
+<li>设备存在，不代表已经绑定到正确商家和车辆。</li>
+</ul>
+<p><strong>参考：</strong><span class="case-reference">CASE-20260512-6337504-hello-pickup-status-unsynced</span>、<span class="case-reference">CASE-20260730-639</span>。</p>
+<hr>
+<h1 id="part-106">第六部分：8个真实案例，用简单的话讲<a class="anchor" href="#part-106" aria-label="链接到第六部分：8个真实案例，用简单的话讲">#</a></h1>
+<h2 id="part-107">29. 库存原来同步成功，后来被系统自己释放了<a class="anchor" href="#part-107" aria-label="链接到29. 库存原来同步成功，后来被系统自己释放了">#</a></h2>
+<p><strong>案例：</strong><span class="case-reference">CASE-20260804-615</span></p>
+<ul>
+<li>现象：哈啰已经占车，滴滴还是产生了新订单。</li>
+<li>第一反应通常是：滴滴没有检查库存。</li>
+<li>真正要问：滴滴新订单创建时，哈啰的远端库存还在不在？</li>
+<li>证据：8月1日库存曾成功同步；8月4日系统先把它释放了，重新添加时又失败。</li>
+<li>后续：失败后很长时间没有恢复，滴滴就在这段时间产生了新订单。</li>
+<li>结论：问题不是“从来没同步”，而是“先释放、后重建；重建失败后没有自动恢复”。</li>
+</ul>
+<h2 id="part-108">30. 更新库存其实分成删除和新增两步<a class="anchor" href="#part-108" aria-label="链接到30. 更新库存其实分成删除和新增两步">#</a></h2>
+<p><strong>案例：</strong><span class="case-reference">CASE-20260401-979</span></p>
+<ul>
+<li>现象：改排后铁行库存不见了。</li>
+<li>容易误判：改排没有触发同步。</li>
+<li>证据：同步触发了，而且更新操作先删除旧库存，再新增新库存。</li>
+<li>结果：删除成功，新增因为操作太频繁失败。</li>
+<li>结论：库存停在“旧的删了，新的没加上”的状态，系统也没有补回来。</li>
+</ul>
+<h2 id="part-109">31. 接口说成功，但少返回了一条服务圈<a class="anchor" href="#part-109" aria-label="链接到31. 接口说成功，但少返回了一条服务圈">#</a></h2>
+<p><strong>案例：</strong><span class="case-reference">CASE-20260415-549</span></p>
+<ul>
+<li>现象：服务圈保存了，但哈啰没有同步成功。</li>
+<li>容易误判：看到 <code>success=true</code> 就认为三方处理完成。</li>
+<li>证据：请求里有“进贤门”，成功响应里却没有这一条。</li>
+<li>本地代码又默认每一条都会返回，最后出现空指针。</li>
+<li>结论：整体成功不等于每个对象都成功；批量接口要对比请求和响应列表。</li>
+</ul>
+<h2 id="part-110">32. 多次回调用了同一个去重编号<a class="anchor" href="#part-110" aria-label="链接到32. 多次回调用了同一个去重编号">#</a></h2>
+<p><strong>案例：</strong><span class="case-reference">CASE-20260504-ctrip-dispatch-1128146968627582</span></p>
+<ul>
+<li>现象：SaaS已经换成新车，携程还显示旧车。</li>
+<li>证据：旧车和新车回调在同一秒发出，但用了相同的 <code>operateSerialNumber</code>。</li>
+<li>携程页面最后停在第一条旧车内容。</li>
+<li>结论：携程很可能把后面的回调当成重复请求，没有再次处理。</li>
+</ul>
+<h2 id="part-111">33. 多出来的费用在三方下单时就有<a class="anchor" href="#part-111" aria-label="链接到33. 多出来的费用在三方下单时就有">#</a></h2>
+<p><strong>案例：</strong><span class="case-reference">CASE-20260324-343</span></p>
+<ul>
+<li>现象：订单出现无忧尊享费用，但SaaS当前配置没有。</li>
+<li>容易误判：费用是下单后人工加的。</li>
+<li>证据：携程原始下单请求已经带了这项费用。</li>
+<li>SaaS允许跳过价格检查，并用携程费用替换了本地费用。</li>
+<li>结论：费用来自携程下单数据，不是后加；携程为什么带入仍需三方确认。</li>
+</ul>
+<h2 id="part-112">34. 保险加购失败，但取车还是成功了<a class="anchor" href="#part-112" aria-label="链接到34. 保险加购失败，但取车还是成功了">#</a></h2>
+<p><strong>案例：</strong><span class="case-reference">CASE-20260417-508</span></p>
+<ul>
+<li>现象：用户取车时选了保险，订单里却没有保险费用。</li>
+<li>证据：前端确实提交了保险，后端也识别到了。</li>
+<li>问题：查询保险价格时用了错误渠道，导致加购失败。</li>
+<li>主取车流程没有检查这个失败，仍然显示取车成功。</li>
+<li>结论：不能因为主流程成功，就认为里面的每一步都成功。</li>
+</ul>
+<h2 id="part-113">35. 系统自动上报一次，商户又手动上报一次<a class="anchor" href="#part-113" aria-label="链接到35. 系统自动上报一次，商户又手动上报一次">#</a></h2>
+<p><strong>案例：</strong><span class="case-reference">CASE-20260410-854</span></p>
+<ul>
+<li>现象：商户上报合同时提示该车已经有合同，但自己找不到。</li>
+<li>证据：商户调用取车接口时，系统已经自动创建了一份合同。</li>
+<li>后来商户再次手动上报，三方因此提示重复。</li>
+<li>结论：问题不是神秘的历史脏数据，而是两条流程做了同一件事。</li>
+</ul>
+<h2 id="part-114">36. 钱没有丢，只是在另一个账户里<a class="anchor" href="#part-114" aria-label="链接到36. 钱没有丢，只是在另一个账户里">#</a></h2>
+<p><strong>案例：</strong><span class="case-reference">CASE-20260409-238</span></p>
+<ul>
+<li>现象：已经分账，但页面可提现余额为0。</li>
+<li>证据：开通个人子账户后，新分账进入个人子账户；历史钱还在主账户。</li>
+<li>当前页面和提现只看新的个人子账户，没有把主账户余额加进来。</li>
+<li>结论：不是分账失败，而是账户切换后查询口径变了。</li>
+</ul>
+<hr>
+<h1 id="part-115">第七部分：值班检查表<a class="anchor" href="#part-115" aria-label="链接到第七部分：值班检查表">#</a></h1>
+<h2 id="part-116">39. 提问前<a class="anchor" href="#part-116" aria-label="链接到39. 提问前">#</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"> 我写了用户实际看到的现象。</li>
+<li><input disabled="" type="checkbox"> 我写了正常应该怎样。</li>
+<li><input disabled="" type="checkbox"> 至少有一个能搜索的对象编号。</li>
+<li><input disabled="" type="checkbox"> 写了渠道和环境。</li>
+<li><input disabled="" type="checkbox"> 写了时间；不知道时明确写未知。</li>
+<li><input disabled="" type="checkbox"> 写了用户操作顺序。</li>
+<li><input disabled="" type="checkbox"> 把截图中的关键内容转成了文字和字段。</li>
+<li><input disabled="" type="checkbox"> 写清已经查过什么、还没查什么。</li>
+<li><input disabled="" type="checkbox"> 这次只想让 AI 回答一个明确问题。</li>
+</ul>
+<h2 id="part-117">40. 发结论前<a class="anchor" href="#part-117" aria-label="链接到40. 发结论前">#</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"> 每个关键判断都有日志、接口或代码证据。</li>
+<li><input disabled="" type="checkbox"> 事实、猜测和未知内容已经分开。</li>
+<li><input disabled="" type="checkbox"> 已经找到问题最早出现在哪一步。</li>
+<li><input disabled="" type="checkbox"> 写了哪些原因已经排除。</li>
+<li><input disabled="" type="checkbox"> 没有猜三方平台内部的处理方式。</li>
+<li><input disabled="" type="checkbox"> 写了结论的可信程度。</li>
+<li><input disabled="" type="checkbox"> 写了怎么处理、处理后怎么验证。</li>
+<li><input disabled="" type="checkbox"> 需要改数据或配置时，已经等待人工确认。</li>
+<li><input disabled="" type="checkbox"> 对外回复没有内部源码、敏感日志和无关编号。</li>
+</ul>
+<h2 id="part-118">41. 什么时候找研发或二线<a class="anchor" href="#part-118" aria-label="链接到41. 什么时候找研发或二线">#</a></h2>
+<p>这些情况应该升级：</p>
+<ul>
+<li>已经查到具体代码、消息顺序、重复请求或自动恢复问题。</li>
+<li>需要改代码、数据库、任务状态或渠道映射。</li>
+<li>同类问题影响多个商家。</li>
+<li>本地没有相关源码，无法继续确认。</li>
+<li>本地请求和响应都正常，但三方最终状态仍不对。</li>
+<li>涉及资金、合同、支付或不可逆状态。</li>
+</ul>
+<p>升级时不要只写：</p>
+<pre><code class="language-text">用户说没同步，麻烦研发看看。
+</code></pre>
+<p>要写成：</p>
+<pre><code class="language-text">问题现象：
+影响对象：
+发生时间：
+已经确认的事实：
+已经排除的原因：
+当前判断：
+需要研发回答的问题：
+本次禁止执行的操作：
+</code></pre>
+<h2 id="part-119">42. 最后记住四句话<a class="anchor" href="#part-119" aria-label="链接到42. 最后记住四句话">#</a></h2>
+<ol>
+<li><strong>先把对象和时间说清楚。</strong></li>
+<li><strong>一次只让 AI 查一个问题。</strong></li>
+<li><strong>让 AI 把事实和猜测分开。</strong></li>
+<li><strong>没有证据时，不要急着下结论。</strong></li>
+</ol>
+
+    </main>
+  </div>
+
+  <button class="back-top" type="button" aria-label="回到顶部">↑</button>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var body = document.body;
+      var search = document.getElementById('search');
+      var searchCount = document.getElementById('search-count');
+      var rows = Array.prototype.slice.call(document.querySelectorAll('.table-scroll tbody tr'));
+      var tables = Array.prototype.slice.call(document.querySelectorAll('.table-scroll'));
+      var shade = document.querySelector('.shade');
+      var backTop = document.querySelector('.back-top');
+      var fontSize = 17;
+
+      document.querySelectorAll('pre').forEach(function (pre) {
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'copy-code';
+        button.textContent = '复制';
+        button.addEventListener('click', function () {
+          var code = pre.querySelector('code');
+          var content = code ? code.textContent : pre.textContent;
+          var fallbackCopy = function () {
+            var textarea = document.createElement('textarea');
+            textarea.value = content;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            textarea.remove();
+          };
+          var copied = function () {
+            button.textContent = '已复制';
+            setTimeout(function () { button.textContent = '复制'; }, 1200);
+          };
+
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(content).then(copied).catch(function () {
+              fallbackCopy();
+              copied();
+            });
+          } else {
+            fallbackCopy();
+            copied();
+          }
+        });
+        pre.appendChild(button);
+      });
+
+      function normalize(value) {
+        return (value || '').toLocaleLowerCase('zh-CN').replace(/s+/g, ' ').trim();
+      }
+
+      function filterTables() {
+        var query = normalize(search.value);
+        var visible = 0;
+        rows.forEach(function (row) {
+          var match = !query || normalize(row.textContent).indexOf(query) !== -1;
+          row.hidden = !match;
+          if (match) visible += 1;
+        });
+        tables.forEach(function (frame) {
+          var anyVisible = Array.prototype.some.call(frame.querySelectorAll('tbody tr'), function (row) { return !row.hidden; });
+          frame.hidden = Boolean(query) && !anyVisible;
+        });
+        searchCount.textContent = query ? '找到 ' + visible + ' 条表格记录' : '可筛选表格';
+      }
+
+      search.addEventListener('input', filterTables);
+      search.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+          search.value = '';
+          filterTables();
+          search.blur();
+        }
+      });
+
+      function setFontSize(next) {
+        fontSize = Math.max(15, Math.min(21, next));
+        root.style.setProperty('--reader-size', fontSize + 'px');
+      }
+      document.querySelector('.font-down').addEventListener('click', function () { setFontSize(fontSize - 1); });
+      document.querySelector('.font-up').addEventListener('click', function () { setFontSize(fontSize + 1); });
+      document.querySelector('.print-button').addEventListener('click', function () { window.print(); });
+
+      function closeNav() { body.classList.remove('nav-open'); }
+      document.querySelector('.menu-button').addEventListener('click', function () { body.classList.toggle('nav-open'); });
+      shade.addEventListener('click', closeNav);
+      document.querySelectorAll('.toc-item').forEach(function (link) { link.addEventListener('click', closeNav); });
+
+      var tocItems = Array.prototype.slice.call(document.querySelectorAll('.toc-item'));
+      var tocMap = {};
+      tocItems.forEach(function (item) { tocMap[item.getAttribute('href').slice(1)] = item; });
+      var observer = new IntersectionObserver(function (entries) {
+        var visible = entries.filter(function (entry) { return entry.isIntersecting; });
+        if (!visible.length) return;
+        visible.sort(function (a, b) { return Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top); });
+        tocItems.forEach(function (item) { item.classList.remove('active'); });
+        var current = tocMap[visible[0].target.id];
+        if (current) {
+          current.classList.add('active');
+          current.scrollIntoView({ block: 'nearest' });
+        }
+      }, { rootMargin: '-70px 0px -76% 0px' });
+      document.querySelectorAll('.document h1[id], .document h2[id]').forEach(function (heading) { observer.observe(heading); });
+
+      function updateScroll() {
+        var height = document.documentElement.scrollHeight - window.innerHeight;
+        var percent = height > 0 ? (window.scrollY / height) * 100 : 0;
+        document.querySelector('.progress-bar').style.width = percent + '%';
+        backTop.classList.toggle('show', window.scrollY > 650);
+      }
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      backTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+      updateScroll();
+    }());
+  </script>
+</body>
+</html>
